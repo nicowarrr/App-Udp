@@ -1,0 +1,16 @@
+.material-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+  
+.material-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    text-align: center;
+  }
+  
+.material-card button {
+    margin: 5px;
+  }

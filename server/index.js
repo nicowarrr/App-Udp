@@ -3,6 +3,8 @@ const app = express();
 const multer = require('multer');
 const mysql = require("mysql2");
 const cors = require("cors");
+const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 // Configuración de almacenamiento para Multer
 const storage = multer.diskStorage({
@@ -90,6 +92,31 @@ app.get('/materials', (req, res) => {
     db.query(query, (err, results) => {
       if (err) throw err;
       res.send(results);
+    });
+  });
+
+app.delete('/materials/:id', (req, res) => {
+    const { id } = req.params;
+    const querySelect = 'SELECT filename FROM materials WHERE id = ?';
+    const queryDelete = 'DELETE FROM materials WHERE id = ?';
+  
+    db.query(querySelect, [id], (err, results) => {
+      if (err) throw err;
+      if (results.length > 0) {
+        const filename = results[0].filename;
+        const filepath = path.join(__dirname, 'uploads', filename);
+  
+        fs.unlink(filepath, err => {
+          if (err) throw err;
+  
+          db.query(queryDelete, [id], (err, result) => {
+            if (err) throw err;
+            res.send({ message: 'Archivo eliminado' });
+          });
+        });
+      } else {
+        res.status(404).send({ message: 'Archivo no encontrado' });
+      }
     });
   });
 

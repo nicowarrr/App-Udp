@@ -6,7 +6,7 @@ import Register from "../src/pages/register/register.jsx";
 import reportWebVitals from "./reportWebVitals";
 import Menu from "../src/pages/Menu/Menu.jsx"
 import UploadForm from "../src/pages/subidaMaterial/subida.jsx"
-
+import MaterialList from "./pages/verMaterial/MaterialList.jsx";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -16,6 +16,7 @@ root.render(
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Menu/>} />
         <Route path="/subida" element={<UploadForm/>} />
+        <Route path="/Material" element={<MaterialList/>} />
 
       </Routes>
     </Router>
