@@ -3,6 +3,7 @@ import MultiInputFields from "../../components/multiInputFields/multiInputFields
 import Button from "../../components/button/button.jsx";
 import ComboBox from "../../components/comboBox/ComboBox.jsx";
 import registerUser from "../../services/registerServices.js";
+import { useNavigate } from "react-router-dom";
 import "./register.css"
 //import { useNavigate } from "react-router-dom";
 import logo from "../../../src/logo.jpg";
@@ -12,6 +13,7 @@ function Register() {
   const [formValues, setFormValues] = useState({});
   const [dataUser, setDataUser] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   //const navigate = useNavigate();
   const fieldsForm = ["Mail", "Contraseña", "Nombre"];
   const typeRol = [
@@ -39,7 +41,7 @@ function Register() {
         console.log(dataUser)
         await registerUser(dataUser);
         setErrorMessage("");
-        //navigate("/login"); // Limpiar el mensaje de error si el registro es exitoso
+        navigate("/login");
       } catch (error) {
         setErrorMessage("Hubo un error en el registro. Intenta nuevamente.");
       } //const responseData = await registerUser(dataUser)

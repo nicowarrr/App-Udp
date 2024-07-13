@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "../src/pages/login/Login.jsx";
 import Register from "../src/pages/register/register.jsx";
 import reportWebVitals from "./reportWebVitals";
-import Menu from "../src/pages/Menu/Menu.jsx"
 import UploadForm from "../src/pages/subidaMaterial/subida.jsx"
 import MaterialList from "./pages/verMaterial/MaterialList.jsx";
+import MaterialList2 from "./pages/verMaterial/MaterialList2.jsx";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -14,9 +14,9 @@ root.render(
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/menu" element={<Menu/>} />
         <Route path="/subida" element={<UploadForm/>} />
         <Route path="/Material" element={<MaterialList/>} />
+        <Route path="/Material2" element={<MaterialList2/>} />
 
       </Routes>
     </Router>

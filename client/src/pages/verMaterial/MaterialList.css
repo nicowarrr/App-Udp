@@ -14,3 +14,10 @@
 .material-card button {
     margin: 5px;
   }
+
+.button {
+    margin-top: 1rem;
+    color: red;
+    margin-bottom: 1.5rem;
+    gap: 1.5rem;
+  }

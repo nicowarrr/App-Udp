@@ -56,22 +56,25 @@ app.post("/create", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log("Request: ", req.body);
-    const { Mail, Contraseña } = req.body;
-    const query = "SELECT * FROM Usuarios WHERE mail = ? AND password = ?"; // Asegúrate de que 'mail' y 'password' son los nombres correctos de las columnas
+  console.log("Request: ", req.body);
+  const { Mail, Contraseña } = req.body;
+  const query = "SELECT nombre, rol FROM Usuarios WHERE mail = ? AND password = ?";
 
-    db.query(query, [Mail, Contraseña], (err, results) => {
-        if (err) {
-            console.error('Error during login query:', err);
-            return res.status(500).send({ error: "Internal server error" });
-        }
-        if (results.length > 0) {
-            res.send({ success: true, message: "Login successful" });
-        } else {
-            res.send({ success: false, message: "Invalid credentials" });
-        }
-    });
+  db.query(query, [Mail, Contraseña], (err, results) => {
+      if (err) {
+          console.error('Error during login query:', err);
+          return res.status(500).send({ error: "Internal server error" });
+      }
+      if (results.length > 0) {
+          const user = results[0];
+          res.send({ success: true, message: "Login successful", role: user.rol, nombre: user.nombre });
+      } else {
+          res.send({ success: false, message: "Invalid credentials" });
+      }
+  });
 });
+
+
 
 // Ruta para subir archivos
 app.post('/upload', upload.single('file'), (req, res) => {

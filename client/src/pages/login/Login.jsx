@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MultiInputFields from "../../components/multiInputFields/multiInputFields.jsx"
+import MultiInputFields from "../../components/multiInputFields/multiInputFields.jsx";
 import Buttonn from "../../components/button/button.jsx";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
@@ -26,7 +26,14 @@ function Login() {
       const response = await Axios.post("http://localhost:3001/login", dataUser);
       if (response.data.success) {
         console.log("Login successful");
-        navigate("/menu"); // Redirige al usuario a la página del dashboard o donde quieras
+        const role = response.data.role;
+        const userName = response.data.nombre; // Obtén el nombre de usuario desde la respuesta
+        
+        if (role === "Alumno") {
+          navigate("/Material2", { state: { userName } }); // Pasa el nombre de usuario como estado a la ruta del alumno
+        } else if (role === "Profesor") {
+          navigate("/Material", { state: { userName } }); // Pasa el nombre de usuario como estado a la ruta del profesor
+        }
       } else {
         setErrorMessage(response.data.message);
       }
@@ -36,18 +43,13 @@ function Login() {
     }
   };
 
-  /*const redirectToRegister = () => {
-    navigate('/register');
-  };*/
-
   return (
     <div className="App">
       <div className="Datos">
-      <img src={logo} alt="Logo" className="logo" />
-      <h1 className="title">Iniciar Sesión</h1>
+        <img src={logo} alt="Logo" className="logo" />
+        <h1 className="title">Iniciar Sesión</h1>
         <MultiInputFields names={fieldsForm} onChange={handleInputChange} />
         <Buttonn name="Login" onClick={handleSubmit} />
-       {/* <Buttonn name="register" onClick={redirectToRegister} />*/}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
@@ -55,4 +57,5 @@ function Login() {
 }
 
 export default Login;
+
 

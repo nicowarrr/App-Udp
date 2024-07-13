@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './subida.css';
 import logo from '../../../src/logo.jpg';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Container, Box, Typography, AppBar, Toolbar, LinearProgress } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 function UploadForm() {
   const [file, setFile] = useState(null);
   const [documentName, setDocumentName] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -20,26 +23,36 @@ function UploadForm() {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('documentName1', documentName);
-    formData.append('documentName2', documentName);
+    formData.append('documentName', documentName);
 
+    setUploading(true);
     await axios.post('http://localhost:3001/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
+      },
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setProgress(percentCompleted);
       }
     });
 
+    setUploading(false);
+    setProgress(0);
     alert('Archivo subido correctamente');
   };
 
   return (
-    <div className="App">
-      <div className="Datos">
-        <img src={logo} alt="Logo" className="logo" />
-        <h1 className="title">Iniciar Sesión</h1>
-
-        <form className="form" onSubmit={handleSubmit}>
-          <div className="datos">
+    <>
+      <AppBar position="static" style={{ backgroundColor: 'black' }}>
+        <Toolbar>
+          <img src={logo} alt="Logo" style={{ marginRight: '20px', width: '60px' }} />
+          <Typography variant="h6" style={{ color: 'white' }}>Subida de Archivos</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="sm">
+        <Box my={4} p={3} border={1} borderRadius={4} boxShadow={3} style={{ backgroundColor: 'white' }}>
+          <Typography variant="h4" gutterBottom style={{ color: 'black', textAlign: 'center' }}>Subir Archivo</Typography>
+          <form onSubmit={handleSubmit}>
             <TextField
               label="Nombre del Documento"
               variant="outlined"
@@ -50,11 +63,11 @@ function UploadForm() {
               margin="normal"
             />
             <Button
-              variant="outlined"
+              variant="contained"
               component="label"
               fullWidth
-              margin="normal"
-              className='button'
+              startIcon={<CloudUploadIcon />}
+              style={{ marginBottom: '16px' }}
             >
               Seleccionar Archivo
               <input
@@ -64,13 +77,14 @@ function UploadForm() {
                 required
               />
             </Button>
-            <Button type="submit" className='button' variant="outlined" color="primary" fullWidth>
+            {uploading && <LinearProgress variant="determinate" value={progress} />}
+            <Button type="submit" className="button" variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }}>
               Subir
             </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </form>
+        </Box>
+      </Container>
+    </>
   );
 }
 
